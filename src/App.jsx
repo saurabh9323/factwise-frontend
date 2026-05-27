@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import './App.css';
 import { useEmployees } from './hooks/useEmployees';
 import Topbar         from './components/Topbar';
@@ -12,6 +13,13 @@ import {
 import { employees } from './data/employees';
 
 export default function App() {
+  const [theme, setTheme] = useState('light'); // 'dark' | 'light'
+
+  // Apply theme class to <html> so CSS variables switch globally
+  useEffect(() => {
+    document.documentElement.classList.toggle('light', theme === 'light');
+  }, [theme]);
+
   const {
     filtered, pageData,
     dept, status, search,
@@ -23,16 +31,16 @@ export default function App() {
   return (
     <div className="flex flex-col h-screen bg-bg text-txt font-sans">
 
-      {/* Topbar — fixed height, never scrolls */}
-      <Topbar total={employees.length} />
+      <Topbar
+        total={employees.length}
+        theme={theme}
+        onThemeToggle={() => setTheme(t => t === 'dark' ? 'light' : 'dark')}
+      />
 
-      {/* Body row — fills remaining height, no overflow here */}
       <div className="flex flex-1 overflow-hidden">
 
-        {/* Sidebar — full height of body row, scrolls internally if needed */}
         <Sidebar activeDept={dept} onDeptChange={handleDept} />
 
-        {/* Main — only this scrolls */}
         <main className="flex-1 overflow-y-auto">
           <div className="p-6 flex flex-col gap-5 max-w-[1400px]">
 

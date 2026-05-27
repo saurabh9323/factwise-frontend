@@ -1,4 +1,4 @@
-import { DEPT_COLORS } from '../utils/constants';
+import { DEPT_COLORS, DEPT_COLORS_LIGHT } from '../utils/constants';
 import { initials, fullName, formatSalary, formatDate } from '../utils/helpers';
 import { ChevronUp, ChevronDown, ChevronsUpDown } from 'lucide-react';
 
@@ -21,7 +21,10 @@ function Avatar({ emp }) {
 }
 
 function DeptPill({ dept }) {
-  const c = DEPT_COLORS[dept] || { bg: '#1e2026', text: '#9ca3af', border: '#2a2d35' };
+  // Pick light or dark pill colors based on the html.light class
+  const isLight = document.documentElement.classList.contains('light');
+  const palette = isLight ? DEPT_COLORS_LIGHT : DEPT_COLORS;
+  const c = palette[dept] || { bg: 'var(--color-surface3)', text: 'var(--color-dim)', border: 'var(--color-border)' };
   return (
     <span
       className="inline-block px-2 py-0.5 rounded-full text-[11px] font-medium border whitespace-nowrap"
@@ -135,7 +138,7 @@ export default function EmployeeTable({
                   {/* Status */}
                   <td className="px-3.5 py-[11px] align-middle">
                     <span className={`inline-flex items-center gap-1.5 text-xs ${e.isActive ? 'text-green' : 'text-muted'}`}>
-                      <span className={`w-1.5 h-1.5 rounded-full ${e.isActive ? 'bg-green shadow-[0_0_5px_#22c55e]' : 'bg-muted'}`} />
+                      <span className={`w-1.5 h-1.5 rounded-full ${e.isActive ? 'bg-green shadow-[0_0_5px_var(--color-green)]' : 'bg-muted'}`} />
                       {e.isActive ? 'Active' : 'Inactive'}
                     </span>
                   </td>
